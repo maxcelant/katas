@@ -157,4 +157,39 @@ function groupBy<T>(arr: T[], key: keyof T): Record<string, T[]> {
   }, {} as Record<string, T[]>)
 }
 
+// 11. Create a utility type DeepReadonly<T> that makes all properties of a type T recursively read-only.
+// This means that not only should the properties of T be read-only, but all nested properties should also be read-only.
+
+type FunctionLike = (...args: any[]) => any;
+
+// If its a function, dont do anything.
+// If its an array, make it a ReadonlyArray.
+// If its an object, make each field readonly.
+// If its a primitive, dont change it.
+type DeepReadOnly<T> = T extends FunctionLike 
+  ? T
+  : T extends Array<infer U>
+  ? ReadonlyArray<DeepReadOnly<U>>
+  : T extends object
+  ? {
+      readonly [K in keyof T]: DeepReadOnly<T[K]>;
+    }
+  : T;
+
+type User = { id: number, name: string, metadata: { dob: string, last_logged: string }};
+
+type ReadOnlyUser = DeepReadOnly<User>;
+
+const user: ReadOnlyUser = {
+  id: 1,
+  name: 'Max',
+  metadata: {
+    dob: '11-09-1998',
+    last_logged: '05-22-2024'
+  }
+}
+
+// user.name = 'foo';
+
+
 
