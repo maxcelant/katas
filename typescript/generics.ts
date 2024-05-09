@@ -2,12 +2,12 @@
 // 1. Define a generic interface ServiceResponseult that represents the result of an operation. 
 // It should have success (boolean) and data (of type T) properties.
 
-interface ServiceResponseult<T> {
+interface ServiceRes<T> {
   success: boolean,
   data: T
 }
 
-const someData: ServiceResponseult<string[]> = {
+const someData: ServiceRes<string[]> = {
   success: true,
   data: ['some', 'data']
 }
