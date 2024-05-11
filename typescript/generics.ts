@@ -189,7 +189,25 @@ const user: ReadOnlyUser = {
   }
 }
 
-// user.name = 'foo';
+// user.name = 'foo'; // Doesn't work!
+console.log(user);
+
+// 12. Create a utility type DeepPartial<T> that makes all properties of a type T recursively optional.
+
+type DeepPartial<T> = {
+  [K in keyof T]?: DeepPartial<T[K]>
+}
+
+type PartialUser = DeepPartial<User>;
+
+const user2: PartialUser = {
+  id: 1,
+  name: 'David'
+  // metadata is not here because its optional!
+}
+
+
+
 
 
 
