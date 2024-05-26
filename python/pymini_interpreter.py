@@ -15,6 +15,10 @@ class Expr(ABC):
         @abstractmethod
         def visit_sub_expr(self, expr: Expr.Subtract):
             pass
+        
+        @abstractmethod
+        def visit_mul_expr(self, expr: Expr.Multiply):
+            pass
 
     @abstractmethod
     def accept(self, visitor: Expr.Visitor):
@@ -26,6 +30,9 @@ class Expr(ABC):
 
         def accept(self, visitor: Expr.Visitor):
             return visitor.visit_literal_expr(self)
+
+        def __repr__(self):
+            return f'Literal({self.value=})'
     
     class Add:
         def __init__(self, right, left):
@@ -35,6 +42,9 @@ class Expr(ABC):
         def accept(self, visitor: Expr.Visitor):
             return visitor.visit_add_expr(self)
 
+        def __repr__(self):
+            return f'Add({self.right=}, {self.left=})'
+
     class Subtract:
         def __init__(self, right, left):
             self.right = right
@@ -42,6 +52,20 @@ class Expr(ABC):
 
         def accept(self, visitor: Expr.Visitor):
             return visitor.visit_sub_expr(self)
+
+        def __repr__(self):
+            return f'Sub({self.right=}, {self.left=})'
+        
+    class Multiply:
+        def __init__(self, right, left):
+            self.right = right
+            self.left = left 
+
+        def accept(self, visitor: Expr.Visitor):
+            return visitor.visit_mul_expr(self)
+
+        def __repr__(self):
+            return f'Mul({self.right=}, {self.left=})'
     
 
 class Interpreter(Expr.Visitor):
@@ -52,14 +76,19 @@ class Interpreter(Expr.Visitor):
         return expr.value
 
     def visit_add_expr(self, expr: Expr.Add):
-        right  = self.solve(expr.right)
         left   = self.solve(expr.left)
-        return float(right) + float(left)
+        right  = self.solve(expr.right)
+        return float(left) + float(right)
     
     def visit_sub_expr(self, expr: Expr.Subtract):
-        right = self.solve(expr.right)
         left  = self.solve(expr.left)
-        return float(right) - float(left)
+        right = self.solve(expr.right)
+        return float(left) - float(right)
+    
+    def visit_mul_expr(self, expr: Expr.Multiply):
+        left  = self.solve(expr.left)
+        right = self.solve(expr.right)
+        return float(left) * float(right)
 
 
 if __name__ == '__main__':
