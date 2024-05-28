@@ -89,7 +89,9 @@ if __name__ == '__main__':
   tokens = [
     TokenItem(literal='2', token_type=TokenType.LITERAL),
     TokenItem(literal='*', token_type=TokenType.MUL),
-    TokenItem(literal='2', token_type=TokenType.LITERAL)
+    TokenItem(literal='2', token_type=TokenType.LITERAL),
+    TokenItem(literal='+', token_type=TokenType.ADD),
+    TokenItem(literal='3', token_type=TokenType.LITERAL)
   ]
   parser = Parser(tokens)
   print(parser.parse())
